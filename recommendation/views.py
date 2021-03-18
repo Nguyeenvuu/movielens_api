@@ -60,3 +60,7 @@ def recommendations(request):
             return Response({'success1':False}, status=status.HTTP_200_OK)
     else:
         return Response({'success2':False}, status=status.HTTP_200_OK)
+
+# {
+#     "user_id": 
+# }

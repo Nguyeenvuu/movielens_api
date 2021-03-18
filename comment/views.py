@@ -27,6 +27,9 @@ def commentlist(request):
         return Response(data=data,status=status.HTTP_200_OK)
     except:
         return Response({'success':False}, status=status.HTTP_200_OK)
+# {
+# "user_id": 20,
+# }
 
 
 @api_view(['POST'])

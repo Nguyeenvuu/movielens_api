@@ -15,21 +15,25 @@ class CustomerList(APIView):
     def post(self, request):
         try:
             id = request.data["user_id"]
-            print("1")
+
             customer = Customer.objects.get(user_id=id)
             print(customer)
-            print("2")
+
             data = CustomerSerializer(customer).data
             return Response(data=data, status=status.HTTP_200_OK)
         except:
-            return Response({"success": False}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"success": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+# {
+#     "user_id": 8
+# }
 
 
 class CreateCustomer(APIView):
     serializer_class = CustomerSerializer
 
     def post(self, request):
-        print("1")
+
         user_name     = request.data['user_name']
         password     = request.data['password']
         name       = request.data['name']
@@ -37,11 +41,12 @@ class CreateCustomer(APIView):
         adress       = request.data['adress']
         birthday       = request.data['birthday']
         gender       = request.data['gender']
-        print(user_name, password)
+       
+        # kiểm tra tên user name đã có trong database hay chưa, Nếu chưa thì thêm, Nếu có rồi thì Response username exist
         if Customer.objects.filter(user_name=user_name):
             return Response({"Success2": "userName exist"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print("3")
+            # Hash password trước khi thêm customer
             passwordend = password.encode('ascii')   
             hash_object = hashlib.md5(passwordend)
             print(hash_object.hexdigest())
@@ -58,6 +63,23 @@ class CreateCustomer(APIView):
             return Response({"Success3": True}, status=status.HTTP_200_OK)
 
 
+# {
+#     "user_id": 8,
+#     "user_name": "user_8",
+#     "password": "21541abc",
+#     "name": "Susan",
+#     "email": "susan@gmail.com",
+#     "adress": "Toulon, France",
+#     "birthday": "1960-07-07",
+#     "gender": "female"
+# }
+
+
+
+
+
+
+
 class SignInCustomer(APIView):
     serializer_class = CustomerSerializer
 
@@ -66,14 +88,15 @@ class SignInCustomer(APIView):
             user_name     = request.data['user_name']
             password     = request.data['password']
 
+            # Hash password để kiểm tra thông tin customer
             passwordend = password.encode('ascii')   
             hash_object = hashlib.md5(passwordend)
             print(hash_object.hexdigest())
 
-            
+            # Kiểm tra thông tin  user_name có trong bảng customer thì tiến hành kiểm tra thông tin password
             if get_object_or_404(Customer, user_name=user_name):
                 customer = Customer.objects.get(user_name=user_name)
-
+                
                 if customer.password == hash_object.hexdigest():
                     return Response({"Sign In Success": True}, status=status.HTTP_200_OK)
                 else:
@@ -82,3 +105,7 @@ class SignInCustomer(APIView):
         except:
             return Response({"Success1": False}, status=status.HTTP_400_BAD_REQUEST)
 
+# {
+#     "user_name": "",
+#     "password": ""
+# }
