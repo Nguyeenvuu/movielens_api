@@ -9,7 +9,7 @@ from .serializers import MovieSerializer
 
 # Create your views here.
 
-class MovieList(APIView):
+class MovieViewDetail(APIView):
     def get(self, request, id):
         movies = Movies.objects.get(movie_id=id)
         data   = MovieSerializer(movies).data
