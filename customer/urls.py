@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import CustomerList, CreateCustomer, SignInCustomer
+from .views import CustomerViewDetail, RegisterCustomer, LoginCustomer
 
 urlpatterns = [
 
-    path('',CustomerList.as_view(),name='movies'),
-    path('create/',CreateCustomer.as_view(),name='create'),
-    path('signin/',SignInCustomer.as_view(),name='signin'),
-
+    path('',CustomerViewDetail.as_view(),name='customer'),
+    path('register/',RegisterCustomer.as_view(),name='register'),
+    path('login/',LoginCustomer.as_view(),name='login'),
 
 ]

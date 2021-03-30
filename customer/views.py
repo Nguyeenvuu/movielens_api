@@ -5,11 +5,12 @@ from .models import Customer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 import hashlib
 from django.http import JsonResponse
 # Create your views here.
-
-class CustomerList(APIView):
+#======================== View Detail Customer=========================
+class CustomerViewDetail(APIView):
     serializer_class = CustomerSerializer
 
     def post(self, request):
@@ -17,9 +18,7 @@ class CustomerList(APIView):
             id = request.data["user_id"]
 
             customer = Customer.objects.get(user_id=id)
-            print(customer)
-
-            data = CustomerSerializer(customer).data
+            data     = CustomerSerializer(customer).data
             return Response(data=data, status=status.HTTP_200_OK)
         except:
             return Response({"success": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
@@ -28,19 +27,19 @@ class CustomerList(APIView):
 #     "user_id": 8
 # }
 
-
-class CreateCustomer(APIView):
+#======================== Register Customer=========================
+class RegisterCustomer(APIView):
     serializer_class = CustomerSerializer
 
     def post(self, request):
 
-        user_name     = request.data['user_name']
-        password     = request.data['password']
+        user_name  = request.data['user_name']
+        password   = request.data['password']
         name       = request.data['name']
-        email       = request.data['email']
-        adress       = request.data['adress']
-        birthday       = request.data['birthday']
-        gender       = request.data['gender']
+        email      = request.data['email']
+        adress     = request.data['adress']
+        birthday   = request.data['birthday']
+        gender     = request.data['gender']
        
         # kiểm tra tên user name đã có trong database hay chưa, Nếu chưa thì thêm, Nếu có rồi thì Response username exist
         if Customer.objects.filter(user_name=user_name):
@@ -75,18 +74,14 @@ class CreateCustomer(APIView):
 # }
 
 
-
-
-
-
-
-class SignInCustomer(APIView):
+#======================== Login Customer=========================
+class LoginCustomer(APIView):
     serializer_class = CustomerSerializer
 
     def post(self, request):
         try:
-            user_name     = request.data['user_name']
-            password     = request.data['password']
+            user_name = request.data['user_name']
+            password  = request.data['password']
 
             # Hash password để kiểm tra thông tin customer
             passwordend = password.encode('ascii')   
@@ -104,8 +99,10 @@ class SignInCustomer(APIView):
 
         except:
             return Response({"Success1": False}, status=status.HTTP_400_BAD_REQUEST)
-
 # {
 #     "user_name": "",
 #     "password": ""
 # }
+
+
+
